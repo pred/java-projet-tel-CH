@@ -10,7 +10,7 @@ public class sd {
 
 	public static void main(String[] args) {
 		File f=new File("Film.txt");
-		ListeFilm Liste_Film=new ListeFilm();
+		ListeFilm Liste_Film=new ListeFilm(); //todo : modifier le L majuscule
 		try{
 			Liste_Film.setListe(Parse.readFile1(f));
 		}

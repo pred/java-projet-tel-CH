@@ -44,10 +44,10 @@ public class Film {
 		return this.synopsis;
 	}
 	public String getDirecteur() {
-		String s="";
-		if (this.directeur == null) {
-			return s;
+		if(this.directeur==null){
+			return "";
 		}
+		String s="";
 		s+=this.directeur.getPrenom();
 		s+=" ";
 		s+=this.directeur.getNom();
@@ -87,7 +87,7 @@ public class Film {
 	}	
 
 	public void augmentePoint(){
-		if(this.directeur!=null){ // certains directeurs ne sont pas renseignés et parse.java renvoie null dans ce cas là
+		if(this.directeur!=null){
 			this.directeur.augmentePoint();
 		}
 		for(int i=0;i<acteurs.size();i++){

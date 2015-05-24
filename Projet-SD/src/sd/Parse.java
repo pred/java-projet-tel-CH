@@ -11,20 +11,6 @@ import java.util.List;
 public class Parse {
 	static List<String> genreGene = StringListGenre.ListGenre();
 	
-	public int countFile(File fin) throws IOException { // inutile, je garde au cas où
-		FileInputStream fis = new FileInputStream(fin);
-		 
-		//Construct BufferedReader from InputStreamReader
-		BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-	 
-		int i = 0;
-		while ((br.readLine()) != null) {
-			i++;		
-		}
-	 
-		br.close();
-		return i; 
-	}
 	
 	private static String[] titre (String line) { // méthode pour récupérer titre date type
 		String delims = "[()\\.]";  // délimiteur
@@ -63,8 +49,39 @@ public class Parse {
 		Acteur tempo; // var temporaire
 		List<Acteur> acteurs = new ArrayList<Acteur>(); //liste qu'on va renvoyer
 		for (int i=0; i<tokens.length;i++) { // tant qu'il y a qlq chose dans le tableau
+			System.out.println(tokens[i]);
 			String[] tokens2 = tokens[i].split(" "); // nouveau tableau pour parser prénom et nom
-			tempo = new Acteur(tokens2[0].trim().replaceAll(" +", " "), tokens2[1]); // on range l'acteur
+			//System.out.println(tokens2[1]);
+			String prenom = tokens2[0];
+			//System.out.println(prenom);
+			String nom = "";
+			int f = 0;
+			if (tokens2.length>1) { //rihanna
+				nom = tokens2[1];
+			}
+			
+			//System.out.println(nom);
+			if (prenom.equals("")) {
+				prenom = tokens2[1];
+				//System.out.println(prenom);
+				if(tokens2.length>2) { //rihanna
+				nom = tokens2[2];
+				}
+				if (tokens2.length == 4) {
+					nom = tokens2[2] +" "+ tokens2[3]; // on fait le choix de ne pas gérer les noms 
+				}                                      // de plus de 2 composantes : ex Samuel L. Jackson= ok mais Samuel L. Jackson Jr.  pas ok.
+				f = 1;
+			}
+			if (tokens2.length == 3 && f == 0) {
+				nom = tokens2[1] +" "+ tokens2[2];
+			}
+
+			
+			
+			if (prenom.equals(nom)) {
+				nom="";
+			}
+			tempo = new Acteur(prenom, nom); // on range l'acteur
 		
 			acteurs.add(tempo); // on ajoute chaque acteur à la liste
 		}
@@ -90,11 +107,9 @@ public class Parse {
 	public static List<Film> readFile1(File fin) throws IOException {
 		FileInputStream fis = new FileInputStream(fin); // initialisation du flux
 	 
-		//Construct BufferedReader from InputStreamReader
 		BufferedReader br = new BufferedReader(new InputStreamReader(fis)); // initialisation buffer
 	 
 		String line = null; // initialisation de la variable dans laquelle on va ranger chaque ligne
-	//	int i = countFile(fin);
 		
 		int boucle = 0; // initialisation condition sortie de boucle
 		List<Film> listFilms = new ArrayList<Film>(); // création de la liste finale
@@ -104,23 +119,24 @@ public class Parse {
 		String date = null;
 		String type = null;
 		
-		//try {
+		try {
 			String[] res = titre(line); // on appelle la fonction titre qui va renvoyer un tableau de string
 			titre = res[0]; // dans lequel on trouve le titre, la date et le type
 			date = res[1]; // on les récupère pour pouvoir créer un obj film à la fin
 			type = res[2];
-		/*}
+		}
 		catch (ArrayIndexOutOfBoundsException e) {
 			System.err.println("Caught ArrayIndexOutOfBoundsException: " + e.getMessage());
 			System.out.println(line);
-		}*/
+			System.out.println("Probablement une erreur dans le fichier texte, merci de vérifier la forme");
+		} // Au cas ou le fichier texte a une erreur
 		
 		//System.out.println(titre);
 		//System.out.println(type);
 		
 		line=br.readLine(); // ligne vide
 		//System.out.println(line);
-		line=br.readLine(); // on arrive sur la deuxième ligne de texte, synopsis dans la plupart des cas
+		line=br.readLine(); // on arrive sur la deuxième ligne de texte, synopsis dans la plupart des cas (tous en fait ...)
 		
 		
 		//System.out.println(line); //print synop
