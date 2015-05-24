@@ -9,7 +9,7 @@ import java.io.IOException;
 public class sd {
 
 	public static void main(String[] args) {
-		File f=new File("FastAndFurious.txt");
+		File f=new File("Film.txt");
 		ListeFilm Liste_Film=new ListeFilm(); //todo : modifier le L majuscule
 		try{
 			Liste_Film.setListe(Parse.readFile1(f));
@@ -22,7 +22,7 @@ public class sd {
 		System.out.println(Liste_Film.affiche());
 
 		System.out.println("Quels films avez-vous vus :");
-		System.out.println("Notez les numéro des films que vous avez vu separer d'un seul espace :");
+		System.out.println("Notez les numéros des films que vous avez vus séparés d'un seul espace :");
 		//interaction utilisateur
 		Scanner sc =new Scanner(System.in);
 		String s="";
@@ -100,11 +100,11 @@ public class sd {
 				if(l<Liste_pasvu.size()-1){
 					l++;
 				}else{
-					System.out.println("plus de film a proposer, retour au premier");
+					System.out.println("Plus de film à proposer, retour au premier");
 					l=0;
 				}
 			}else{
-				System.out.println("commande non valide recommencer");
+				System.out.println("commande non valide, tapez o (oui) ou n (non)");
 			}
 		}
 		System.out.println("fin");

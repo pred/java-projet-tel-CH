@@ -61,7 +61,7 @@ public class Parse {
 			//System.out.println(nom);
 			if (prenom.equals("")) {
 				prenom = tokens2[1];
-				System.out.println(prenom);
+				//System.out.println(prenom);
 				if(tokens2.length>2) { //rihanna
 				nom = tokens2[2];
 				}
@@ -88,8 +88,8 @@ public class Parse {
 					return directeurs;
 				}
 			}
-			System.out.println(prenom);
-			System.out.println(nom);
+			//System.out.println(prenom);
+			//System.out.println(nom);
 			tempo = new Directeur(prenom, nom); // on range l'acteur
 			listDirec.add(tempo);
 			directeurs.add(tempo); // on ajoute chaque acteur à la liste
