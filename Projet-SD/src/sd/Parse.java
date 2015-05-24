@@ -16,24 +16,26 @@ public class Parse {
 	private static List<Acteur> listAct = new ArrayList<Acteur>();
 	private static List<Genre> listGenre = new ArrayList<Genre>();
 	
-	private static String[] titre (String line) { // méthode pour récupérer titre date type
+	public static String[] titre (String line) { // méthode pour récupérer titre date type
 		String delims = "[()\\.]";  // délimiteur
 		String[] tokens = line.split(delims); // on parse la ligne et on stocke dans tokens[]
 		String titre = tokens[1].trim().replaceAll(" +", " "); // pour supprimer le double espace
 		//System.out.println(titre); // juste pour check
 		tokens = tokens[2].split(" "); // on split la partie ()
 		String type;
-		if (tokens.length>0) { //si y'a qu'une seule case dans le tableau, c'est que c'est un film
+		if (tokens.length>1) { //si y'a qu'une seule case dans le tableau, c'est que c'est un film
 			type = "TV Series"; // sinon c'est une série
 		} else { type = "Film"; }
 		String date = tokens[0]; //on récupère la date 
-		
+		//System.out.println(titre);
+		//System.out.println(type);
+		//System.out.println(date);
 		String[] res = { titre, type, date }; // on range dans un tableau
 		
 		return res;
 	}
 	
-	private static List<Directeur> director(String line) { // méthod pour récup directeur
+	public static List<Directeur> director(String line) { // méthod pour récup directeur
 		String delims = ":"; // délimiteur
 		String[] tokens = line.split(delims); // on parse pour éliminer le "with :"
 		
@@ -86,7 +88,8 @@ public class Parse {
 					return directeurs;
 				}
 			}
-			
+			System.out.println(prenom);
+			System.out.println(nom);
 			tempo = new Directeur(prenom, nom); // on range l'acteur
 			listDirec.add(tempo);
 			directeurs.add(tempo); // on ajoute chaque acteur à la liste
@@ -96,7 +99,7 @@ public class Parse {
 		return directeurs;
 	}
 	
-	private static List<Acteur> actors(String line) { // méthod pour récup la liste des acteurs
+	public static List<Acteur> actors(String line) { // méthod pour récup la liste des acteurs
 		String delims = ":"; // délimiteur
 		String[] tokens = line.split(delims); // on parse pour éliminer le "with :"
 		String actor = tokens[1].trim().replaceAll(" +", " "); // on ne récupère que la seconde partie +double espace
@@ -156,8 +159,8 @@ public class Parse {
 		return acteurs;
 	}
 	
-	private static List<Genre> genreFilm(String line) { // méthode pour récupérer le genre
-		List<Genre> genres = new ArrayList<Genre>();; // création de la liste que l'on va renvoyer
+	public static List<Genre> genreFilm(String line) { // méthode pour récupérer le genre
+		List<Genre> genres = new ArrayList<Genre>(); // création de la liste que l'on va renvoyer
 		String[] tokens = line.split(" "); // on split sur les espaces => la | n'est pas pris en compte par split
 		for (int i = 0; i < tokens.length;i++) {
 			if (genreGene.contains(tokens[i])) { // on test si chaque élement est un genre
