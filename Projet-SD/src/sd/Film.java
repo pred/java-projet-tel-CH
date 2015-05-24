@@ -30,6 +30,7 @@ public class Film {
 	public String getTitre() {
 		return this.titre;
 	}	
+	
 	public String getAnnee() {
 		return this.annee;
 	}

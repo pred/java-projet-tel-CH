@@ -11,10 +11,10 @@ import java.util.List;
 public class Parse {
 	
 	
-	static List<String> genreGene = StringListGenre.ListGenre();
-	static List<Directeur> listDirec = new ArrayList<Directeur>();
-	static List<Acteur> listAct = new ArrayList<Acteur>();
-	static List<Genre> listGenre = new ArrayList<Genre>();
+	private static List<String> genreGene = StringListGenre.ListGenre();
+	private static List<Directeur> listDirec = new ArrayList<Directeur>();
+	private static List<Acteur> listAct = new ArrayList<Acteur>();
+	private static List<Genre> listGenre = new ArrayList<Genre>();
 	
 	private static String[] titre (String line) { // méthode pour récupérer titre date type
 		String delims = "[()\\.]";  // délimiteur
