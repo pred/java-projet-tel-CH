@@ -45,6 +45,9 @@ public class Film {
 	}
 	public String getDirecteur() {
 		String s="";
+		if (this.directeur == null) {
+			return s;
+		}
 		s+=this.directeur.getPrenom();
 		s+=" ";
 		s+=this.directeur.getNom();
@@ -84,7 +87,7 @@ public class Film {
 	}	
 
 	public void augmentePoint(){
-		if(this.directeur!=null){
+		if(this.directeur!=null){ // certains directeurs ne sont pas renseignés et parse.java renvoie null dans ce cas là
 			this.directeur.augmentePoint();
 		}
 		for(int i=0;i<acteurs.size();i++){
