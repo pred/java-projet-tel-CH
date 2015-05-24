@@ -9,8 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Parse {
-	static List<String> genreGene = StringListGenre.ListGenre();
 	
+	
+	static List<String> genreGene = StringListGenre.ListGenre();
+	static List<Directeur> listDirec = new ArrayList<Directeur>();
+	static List<Acteur> listAct = new ArrayList<Acteur>();
+	static List<Genre> listGenre = new ArrayList<Genre>();
 	
 	private static String[] titre (String line) { // méthode pour récupérer titre date type
 		String delims = "[()\\.]";  // délimiteur
@@ -29,15 +33,67 @@ public class Parse {
 		return res;
 	}
 	
-	private static Directeur director(String line) { // méthod pour récup directeur
+	private static List<Directeur> director(String line) { // méthod pour récup directeur
+		String delims = ":"; // délimiteur
+		String[] tokens = line.split(delims); // on parse pour éliminer le "with :"
 		
-		String delims = "[:]"; //délimiteur
-		String[] tokens = line.split(delims); // parse pour retirer le "Director : "
-		String director = tokens[1].trim().replaceAll(" +", " "); // double espace
-		//System.out.println(director);
-		tokens=director.split(" "); // on parse à nouveau pour prénom et nom
-		Directeur direc = new Directeur(tokens[0],tokens[1]); // on crée un nouvel obj directeur
-		return direc;
+		String director = tokens[1].trim().replaceAll(" +", " "); // on ne récupère que la seconde partie +double espace
+		
+		tokens = director.split(","); // maintenant on veut récupérer chaque directeur
+		Directeur tempo; // var temporaire
+		
+		List<Directeur> directeurs = new ArrayList<Directeur>(); //liste qu'on va renvoyer
+		
+		for (int i=0; i<tokens.length;i++) { // tant qu'il y a qlq chose dans le tableau
+			//System.out.println(tokens[i]);
+			String[] tokens2 = tokens[i].split(" "); // nouveau tableau pour parser prénom et nom
+			//System.out.println(tokens2[1]);
+			String prenom = tokens2[0];
+			//System.out.println(prenom);
+			String nom = "";
+			int f = 0;
+			if (tokens2.length>1) { 
+				nom = tokens2[1];
+			}
+			
+			//System.out.println(nom);
+			if (prenom.equals("")) {
+				prenom = tokens2[1];
+				System.out.println(prenom);
+				if(tokens2.length>2) { //rihanna
+				nom = tokens2[2];
+				}
+				if (tokens2.length == 4) {
+					nom = tokens2[2] +" "+ tokens2[3]; // on fait le choix de ne pas gérer les noms 
+				}                                      // de plus de 2 composantes : ex Samuel L. Jackson= ok mais Samuel L. Jackson Jr.  pas ok.
+				f = 1;
+			}
+			if (tokens2.length == 3 && f == 0) {
+				nom = tokens2[1] +" "+ tokens2[2];
+			}
+
+			
+			
+			if (prenom.equals(nom)) {
+				nom="";
+			}
+
+			
+
+			for (int j=0;j<listDirec.size();j++) {
+				if (listDirec.get(j).getNom().equals(nom) && listDirec.get(j).getPrenom().equals(prenom) ) {
+					directeurs.add(listDirec.get(j));
+					return directeurs;
+				}
+			}
+			
+			tempo = new Directeur(prenom, nom); // on range l'acteur
+			listDirec.add(tempo);
+			directeurs.add(tempo); // on ajoute chaque acteur à la liste
+
+		}
+		
+		return directeurs;
 	}
 	
 	private static List<Acteur> actors(String line) { // méthod pour récup la liste des acteurs
@@ -49,7 +105,7 @@ public class Parse {
 		Acteur tempo; // var temporaire
 		List<Acteur> acteurs = new ArrayList<Acteur>(); //liste qu'on va renvoyer
 		for (int i=0; i<tokens.length;i++) { // tant qu'il y a qlq chose dans le tableau
-			System.out.println(tokens[i]);
+			//System.out.println(tokens[i]);
 			String[] tokens2 = tokens[i].split(" "); // nouveau tableau pour parser prénom et nom
 			//System.out.println(tokens2[1]);
 			String prenom = tokens2[0];
@@ -81,10 +137,21 @@ public class Parse {
 			if (prenom.equals(nom)) {
 				nom="";
 			}
+
+			for (int j=0;j<listAct.size();j++) {
+				if (listAct.get(j).getNom().equals(nom) && listAct.get(j).getPrenom().equals(prenom) ) {
+					acteurs.add(listAct.get(j));
+					return acteurs;
+				}
+			}
+			
 			tempo = new Acteur(prenom, nom); // on range l'acteur
-		
+			listAct.add(tempo);
 			acteurs.add(tempo); // on ajoute chaque acteur à la liste
+			
 		}
+		
+		
 		
 		return acteurs;
 	}
@@ -94,8 +161,16 @@ public class Parse {
 		String[] tokens = line.split(" "); // on split sur les espaces => la | n'est pas pris en compte par split
 		for (int i = 0; i < tokens.length;i++) {
 			if (genreGene.contains(tokens[i])) { // on test si chaque élement est un genre
-				Genre tempo = new Genre(tokens[i]); // si oui, on créé un objet genre
-				genres.add(tempo); // et on le range dans la liste à renvoyer
+				for (int j=0;j<listGenre.size();j++) {
+					if (listGenre.get(j).getType().equals(tokens[i]) ) {
+						genres.add(listGenre.get(j));
+						return genres;
+					}
+				}
+				
+				Genre tempo = new Genre(tokens[i]); // on range l'acteur
+				listGenre.add(tempo);
+				genres.add(tempo); // on ajoute chaque acteur à la liste
 				//System.out.println(tokens[i]);
 			}
 			//System.out.println(tokens[i]);
@@ -153,7 +228,7 @@ public class Parse {
 			line=br.readLine(); // et on passe à la ligne suivante, directeur dans la plupart des cas
 		}
 		
-		Directeur direc = null; // on initialise la variable directeur au cas ou on ne puisse pas rentrer dans le if
+		List<Directeur> direc = null; // on initialise la variable directeur au cas ou on ne puisse pas rentrer dans le if
 		 tempo = line; // on réinitialise tempo avec notre nouvelle ligne
 		 dirPoints = tempo.substring(0,10); // pour "Director :"
 		 withPoints = tempo.substring(0,6); // pour "With :"

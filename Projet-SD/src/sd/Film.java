@@ -9,18 +9,18 @@ public class Film {
 	private String annee;
 	private String type;
 	private String synopsis;
-	private Directeur directeur;
+	private List<Directeur> directeurs;
 	private List<Acteur> acteurs = new ArrayList<Acteur>();
 	private List<Genre> genres = new ArrayList<Genre>();
 	private String duree;
 	private int point;
 	
-	public Film(String titre,String annee,String type,String synopsis,Directeur directeur,List<Acteur> acteurs,List<Genre> genres,String duree) {
+	public Film(String titre,String annee,String type,String synopsis,List<Directeur> directeurs,List<Acteur> acteurs,List<Genre> genres,String duree) {
 		this.titre = titre;
 		this.annee = annee;
 		this.type = type;
 		this.synopsis = synopsis;
-		this.directeur =directeur;
+		this.directeurs =directeurs;
 		this.acteurs=acteurs;
 		this.genres=genres;
 		this.duree=duree;
@@ -44,13 +44,18 @@ public class Film {
 		return this.synopsis;
 	}
 	public String getDirecteur() {
-		if(this.directeur==null){
-			return "";
-		}
 		String s="";
-		s+=this.directeur.getPrenom();
-		s+=" ";
-		s+=this.directeur.getNom();
+		if(this.directeurs==null){
+				return "";
+		}
+		for(int i=0;i<this.directeurs.size();i++){
+			if(i!=0){
+				s+=", ";
+			}
+			s+=this.directeurs.get(i).getPrenom();
+			s+=" ";
+			s+=this.directeurs.get(i).getNom();	
+		}
 		return s;
 	}
 	public String getActeurs() {
@@ -87,8 +92,10 @@ public class Film {
 	}	
 
 	public void augmentePoint(){
-		if(this.directeur!=null){
-			this.directeur.augmentePoint();
+		if(this.directeurs!=null){
+			for(int i=0;i<directeurs.size();i++){
+				this.directeurs.get(i).augmentePoint();
+			}
 		}
 		for(int i=0;i<acteurs.size();i++){
 			this.acteurs.get(i).augmentePoint();
@@ -100,8 +107,10 @@ public class Film {
 	
 	public void calculPoint(){
 		this.point=0;
-		if(this.directeur!=null){
-			this.point+=this.directeur.getPoint();
+		if(this.directeurs!=null){
+			for(int i=0;i<directeurs.size();i++){
+				this.point+=this.directeurs.get(i).getPoint();
+			}
 		}
 		for(int i=0;i<acteurs.size();i++){
 			this.point+=this.acteurs.get(i).getPoint();
